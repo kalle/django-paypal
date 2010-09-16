@@ -7,17 +7,23 @@ from paypal.standard.conf import RECEIVER_EMAIL, POSTBACK_ENDPOINT, SANDBOX_POST
 
 ST_PP_ACTIVE = 'Active'
 ST_PP_CANCELLED = 'Cancelled'
+ST_PP_CANCELED_REVERSAL = 'Canceled_Reversal'
 ST_PP_CLEARED = 'Cleared'
 ST_PP_COMPLETED = 'Completed'
+ST_PP_CREATED = 'Created'
 ST_PP_DENIED = 'Denied'
+ST_PP_EXPIRED = 'Expired'
+ST_PP_FAILED = 'Failed'
 ST_PP_PAID = 'Paid'
 ST_PP_PENDING = 'Pending'
 ST_PP_PROCESSED = 'Processed'
+ST_PP_REFUNDED = 'Refunded'
 ST_PP_REFUSED = 'Refused'
 ST_PP_REVERSED = 'Reversed'
 ST_PP_REWARDED = 'Rewarded'
 ST_PP_UNCLAIMED = 'Unclaimed'
 ST_PP_UNCLEARED = 'Uncleared'
+ST_PP_VOIDED = 'Voided'
 
 try:
     from idmapper.models import SharedMemoryModel as Model
@@ -29,7 +35,7 @@ class PayPalStandardBase(Model):
     # @@@ Might want to add all these one distant day.
     # FLAG_CODE_CHOICES = (
     # PAYMENT_STATUS_CHOICES = "Canceled_ Reversal Completed Denied Expired Failed Pending Processed Refunded Reversed Voided".split()
-    PAYMENT_STATUS_CHOICES = (ST_PP_ACTIVE, ST_PP_CANCELLED, ST_PP_CLEARED, ST_PP_COMPLETED, ST_PP_DENIED, ST_PP_PAID, ST_PP_PENDING, ST_PP_PROCESSED, ST_PP_REFUSED, ST_PP_REVERSED, ST_PP_REWARDED, ST_PP_UNCLAIMED, ST_PP_UNCLEARED)
+    PAYMENT_STATUS_CHOICES = (ST_PP_ACTIVE, ST_PP_CANCELLED, ST_PP_CANCELED_REVERSAL, ST_PP_CLEARED, ST_PP_COMPLETED, ST_PP_CREATED, ST_PP_DENIED, ST_PP_EXPIRED, ST_PP_FAILED, ST_PP_PAID, ST_PP_PENDING, ST_PP_PROCESSED, ST_PP_REFUNDED, ST_PP_REFUSED, ST_PP_REVERSED, ST_PP_REWARDED, ST_PP_UNCLAIMED, ST_PP_UNCLEARED, ST_PP_VOIDED)
     # AUTH_STATUS_CHOICES = "Completed Pending Voided".split()
     # ADDRESS_STATUS_CHOICES = "confirmed unconfirmed".split()
     # PAYER_STATUS_CHOICES = "verified / unverified".split()

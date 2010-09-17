@@ -133,17 +133,23 @@ class PayPalEncryptedPaymentsForm(PayPalPaymentsForm):
     http://blog.mauveweb.co.uk/2007/10/10/paypal-with-django/
     
     """
+    def __init__(self, button_type="buy", *args, **kwargs):
+        self.button_type = button_type
+        d = kwargs.get("initial", {})
+        self.cert = d.pop("cert", settings.PAYPAL_PRIVATE_CERT)
+        self.pub_cert = d.pop("pub_cert", settings.PAYPAL_PUBLIC_CERT)
+        self.paypal_cert = d.pop("paypal_cert", settings.PAYPAL_CERT)
+        self.cert_id = d.pop("cert_id", settings.PAYPAL_CERT_ID)
+
+        super(PayPalEncryptedPaymentsForm, self).__init__(*args, **kwargs)
+
     def _encrypt(self):
         """Use your key thing to encrypt things."""
         from M2Crypto import BIO, SMIME, X509
         # @@@ Could we move this to conf.py?
-        CERT = settings.PAYPAL_PRIVATE_CERT
-        PUB_CERT = settings.PAYPAL_PUBLIC_CERT
-        PAYPAL_CERT = settings.PAYPAL_CERT
-        CERT_ID = settings.PAYPAL_CERT_ID
 
         # Iterate through the fields and pull out the ones that have a value.
-        plaintext = 'cert_id=%s\n' % CERT_ID
+        plaintext = 'cert_id=%s\n' % self.cert_id
         for name, field in self.fields.iteritems():
             value = None
             if name in self.initial:
@@ -159,9 +165,9 @@ class PayPalEncryptedPaymentsForm(PayPalPaymentsForm):
         
         # Begin crypto weirdness.
         s = SMIME.SMIME()
-        s.load_key_bio(BIO.openfile(CERT), BIO.openfile(PUB_CERT))
+        s.load_key_bio(BIO.openfile(self.cert), BIO.openfile(self.pub_cert))
         p7 = s.sign(BIO.MemoryBuffer(plaintext), flags=SMIME.PKCS7_BINARY)
-        x509 = X509.load_cert_bio(BIO.openfile(settings.PAYPAL_CERT))
+        x509 = X509.load_cert_bio(BIO.openfile(self.paypal_cert))
         sk = X509.X509_Stack()
         sk.push(x509)
         s.set_x509_stack(sk)

@@ -141,7 +141,7 @@ class PayPalEncryptedPaymentsForm(PayPalPaymentsForm):
         self.paypal_cert = d.pop("paypal_cert", settings.PAYPAL_CERT)
         self.cert_id = d.pop("cert_id", settings.PAYPAL_CERT_ID)
 
-        super(PayPalPaymentsForm, self).__init__(*args, **kwargs)
+        super(PayPalEncryptedPaymentsForm, self).__init__(*args, **kwargs)
 
     def _encrypt(self):
         """Use your key thing to encrypt things."""
